@@ -4,6 +4,14 @@
 - LangSmith upload / experiment status: completed
 - Custom evaluators: correctness, relevance, groundedness (hallucination risk inverse), conciseness
 
+## Experiment Configuration
+
+| Setting | Value |
+|---|---:|
+| chunk_size | 1500 |
+| chunk_overlap | 180 |
+| top_k | 4 |
+
 ## Overall Metrics
 
 | Metric | Score |
