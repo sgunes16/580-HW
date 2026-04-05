@@ -10,3 +10,4 @@ data/runtime_settings.json
 data/app.db
 .DS_Store
 chroma_sweeps/
+data/pdfs/
