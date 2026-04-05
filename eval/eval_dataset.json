@@ -1,25 +1,125 @@
 {
   "description": "After course PDFs are added, replace questions and reference answers with content grounded in those materials.",
   "items": [
-    { "id": 1, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 2, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 3, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 4, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 5, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 6, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 7, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 8, "difficulty": "easy", "question": "", "reference_answer": "" },
-    { "id": 9, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 10, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 11, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 12, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 13, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 14, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 15, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 16, "difficulty": "medium", "question": "", "reference_answer": "" },
-    { "id": 17, "difficulty": "hard", "question": "", "reference_answer": "" },
-    { "id": 18, "difficulty": "hard", "question": "", "reference_answer": "" },
-    { "id": 19, "difficulty": "hard", "question": "", "reference_answer": "" },
-    { "id": 20, "difficulty": "hard", "question": "", "reference_answer": "" }
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "What are the five main stages of the data engineering lifecycle?",
+      "reference_answer": "The data engineering lifecycle consists of five stages: generation, storage, ingestion, transformation, and serving."
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "What are the \"three Vs\" that are commonly used to explain the properties of big data?",
+      "reference_answer": "The three Vs of big data are volume (massive data size), variety (heterogeneous data sources like text, photos, and video), and velocity (continuous, live data collection)."
+    },
+    {
+      "id": 3,
+      "difficulty": "easy",
+      "question": "In the context of data integration, what does the process of \"bursting\" refer to?",
+      "reference_answer": "Bursting is the process of breaking a single incoming data record into multiple distinct records for downstream processing, such as separating a married couple's joint record into two individual records."
+    },
+    {
+      "id": 4,
+      "difficulty": "easy",
+      "question": "What is a pandas DataFrame?",
+      "reference_answer": "A DataFrame is a two-dimensional, rectangular table of data that contains an ordered, named collection of columns, where each column can be of a different value type. It possesses both a row and a column index."
+    },
+    {
+      "id": 5,
+      "difficulty": "easy",
+      "question": "What does it mean when a document database is described as using \"schema-on-read\"?",
+      "reference_answer": "Schema-on-read means that the structure of the data is implicit and is only interpreted when the data is read by the application code, rather than being explicitly enforced by the database when the data is written."
+    },
+    {
+      "id": 6,
+      "difficulty": "easy",
+      "question": "What are the \"undercurrents\" that support the data engineering lifecycle?",
+      "reference_answer": "The undercurrents that support every aspect of the data engineering lifecycle are security, data management, DataOps, data architecture, orchestration, and software engineering."
+    },
+    {
+      "id": 7,
+      "difficulty": "easy",
+      "question": "In Python's pandas library, what is a Series?",
+      "reference_answer": "A Series is a one-dimensional, array-like object that contains a sequence of values of the same type and an associated array of data labels known as its index."
+    },
+    {
+      "id": 8,
+      "difficulty": "easy",
+      "question": "What is the purpose of \"bucketing\" in the data integration hygiene phase?",
+      "reference_answer": "Bucketing classifies or groups incoming data fields into a standard representation, such as using an incoming numeric \"income\" field to create an \"income_group\" category with rules like placing values between $25,000 and $50,000 into an 'A' group."
+    },
+    {
+      "id": 9,
+      "difficulty": "medium",
+      "question": "How do Online Transaction Processing (OLTP) and Online Analytic Processing (OLAP) systems differ in their main read and write patterns?",
+      "reference_answer": "OLTP systems typically read a small number of records fetched by key and experience random-access, low-latency writes from user input. In contrast, OLAP systems aggregate over large numbers of records for their reads and handle writes via bulk imports or event streams."
+    },
+    {
+      "id": 10,
+      "difficulty": "medium",
+      "question": "Describe the difference between the ETL and ELT data warehouse architectures.",
+      "reference_answer": "In an ETL (Extract, Transform, Load) architecture, data is extracted from source systems, transformed and cleaned in an external processing system, and then loaded into a data warehouse. In ELT (Extract, Load, Transform), raw data is extracted and loaded directly into a staging area within the data warehouse, where transformations are performed using the warehouse's massive computational power."
+    },
+    {
+      "id": 11,
+      "difficulty": "medium",
+      "question": "What is the difference between parallel processing and distributed processing?",
+      "reference_answer": "Parallel processing occurs on a single machine, utilizing multiple cores or processors that communicate through threads and OS resources, and is often CPU-bound. Distributed processing happens across many loosely-coupled machines using network communication, focusing more on sharing resources like memory and storage across multiple machines to bypass disk reading bottlenecks."
+    },
+    {
+      "id": 12,
+      "difficulty": "medium",
+      "question": "What is hierarchical indexing in pandas, and what primary actions rearrange its data?",
+      "reference_answer": "Hierarchical indexing enables multiple index levels on an axis, allowing users to work with higher dimensional data in a lower dimensional form. The two primary actions to rearrange this data are \"stack\" (which pivots columns into rows) and \"unstack\" (which pivots rows into columns)."
+    },
+    {
+      "id": 13,
+      "difficulty": "medium",
+      "question": "What are the three different types of joins that can appear in stream processing?",
+      "reference_answer": "The three types of stream joins are stream-stream joins (matching two events occurring within a time window), stream-table joins (augmenting a stream of activity events with profile information from a database changelog), and table-table joins (joining two database changelogs to produce a materialized view)."
+    },
+    {
+      "id": 14,
+      "difficulty": "medium",
+      "question": "What is \"Reverse ETL\" and why is it used?",
+      "reference_answer": "Reverse ETL is the process of taking processed data, analytics, or scored models from the output side of the data engineering lifecycle and feeding it back into source systems or production SaaS platforms. It is used to drive actions in production, such as pushing calculated cost-per-click bids back into an advertising platform like Google Ads."
+    },
+    {
+      "id": 15,
+      "difficulty": "medium",
+      "question": "What is the Transitive Closure problem in data records, and why is it important for information quality?",
+      "reference_answer": "The Transitive Closure problem involves grouping related records into subsets or clusters based on shared keys or similarities. This acts as a preprocessing step that significantly reduces the number of pairwise comparisons required by downstream analysis tools, improving performance while enhancing data accuracy, redundancy, consistency, and completeness."
+    },
+    {
+      "id": 16,
+      "difficulty": "medium",
+      "question": "How does the pandas pandas.merge function differ from pandas.concat?",
+      "reference_answer": "The pandas.merge function combines datasets by linking rows using one or more keys, implementing database-style join operations similar to SQL. On the other hand, pandas.concat concatenates or \"stacks\" objects together along an axis without using linking keys."
+    },
+    {
+      "id": 17,
+      "difficulty": "hard",
+      "question": "Contrast the Lambda and Kappa architectures for data processing.",
+      "reference_answer": "The Lambda architecture utilizes independent batch, streaming, and serving systems. It sends immutable, append-only source data to both a streaming \"speed\" layer for low-latency processing and a batch layer for precomputed aggregations, combining them in the serving layer. The Kappa architecture, responding to Lambda's complexity, uses a stream-processing platform as the sole backbone for all data handling (ingestion, storage, and serving). It applies real-time and batch processing seamlessly by reading the live event stream and replaying historical data chunks, creating a true event-based architecture."
+    },
+    {
+      "id": 18,
+      "difficulty": "hard",
+      "question": "Explain how the Pregel processing model (Bulk Synchronous Parallel) optimizes batch processing for graphs compared to standard MapReduce.",
+      "reference_answer": "Standard MapReduce is inefficient for iterative graph algorithms because it reads the entire input and produces completely new output datasets on each iteration, even if only small graph portions change. The Pregel model optimizes this by allowing vertices to \"send messages\" to each other along graph edges. During each iteration, a function processes incoming messages for each vertex. Crucially, a vertex remembers its state in memory from one iteration to the next, meaning the function only needs to process new messages, avoiding unnecessary work if no messages are sent to that part of the graph."
+    },
+    {
+      "id": 19,
+      "difficulty": "hard",
+      "question": "In the context of Big Data algorithms, what are the primary applications of hash functions?",
+      "reference_answer": "Hash functions have several major applications in Big Data algorithmics. They are used for dictionary maintenance by powering hash tables that yield constant O(1) search times. They enable frequency counting of events (like word counts) in linear time. Hash functions also facilitate duplicate removal by checking if an item is already in a hash table, and they support canonization by mapping multiple alternate forms of an object (like case-insensitive words) to a single key. Additionally, hashing is the foundational concept behind distributed computing systems like MapReduce."
+    },
+    {
+      "id": 20,
+      "difficulty": "hard",
+      "question": "Describe the declarative approach to entity resolution proposed by Tanton H. Gibbs and the taxonomy of verbs it utilizes to manage reference data.",
+      "reference_answer": "The declarative approach to entity resolution allows users to specify what they want resolved while letting a code generator determine the best implementation, akin to SQL. Gibbs outlines a taxonomy involving verbs to manage reference data. These verbs include \"Create\" to generate a unique link for a managed reference; \"Remove\" to delete a reference and reanalyze the matching graph; \"Update\" to correct inaccurate information while reanalyzing entity structure; and \"Reconcile,\" which uses proximity of match and data provenance to decide whether to create or update a reference."
+    }
   ]
 }
