@@ -17,6 +17,7 @@ BACKEND_ROOT = PROJECT_ROOT / "backend"
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
+from app.config import settings as app_settings  # noqa: E402
 from app.core.langsmith_setup import configure_langsmith  # noqa: E402
 from app.core.runtime_settings import get_settings  # noqa: E402
 from app.services.rag_pipeline import answer_question  # noqa: E402
@@ -350,6 +351,16 @@ def main() -> int:
     args = parser.parse_args()
 
     configure_langsmith()
+    # LangSmith Client/evaluate read os.environ; mirror .env-loaded settings when tracing is off
+    if app_settings.langsmith_api_key:
+        os.environ.setdefault("LANGSMITH_API_KEY", app_settings.langsmith_api_key)
+    if app_settings.langsmith_project:
+        os.environ.setdefault("LANGSMITH_PROJECT", app_settings.langsmith_project)
+    if app_settings.langsmith_endpoint:
+        os.environ.setdefault("LANGSMITH_ENDPOINT", app_settings.langsmith_endpoint)
+    if app_settings.langsmith_workspace_id:
+        os.environ.setdefault("LANGSMITH_WORKSPACE_ID", app_settings.langsmith_workspace_id)
+
     items = load_eval_items()
     rs = get_settings()
 
