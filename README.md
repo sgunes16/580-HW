@@ -27,6 +27,7 @@ If Ollama is not running, you will see connection errors when indexing or chatti
 ## Backend (local)
 
 ```bash
+cp .env.example .env
 cd backend
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
@@ -35,6 +36,8 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 API: `http://127.0.0.1:8000` — OpenAPI: `/docs`
+
+The app reads environment variables from the repo-root `.env` file. Start by copying `.env.example` and then adjust values as needed.
 
 ## Frontend (local)
 
@@ -90,6 +93,55 @@ Server logs (terminal where `uvicorn` runs) record stack traces for unexpected e
 
 - [`eval/eval_dataset.json`](eval/eval_dataset.json): 20 question–answer pairs (difficulty labels); fill after PDFs are available.
 - [`eval/manual_test_results.md`](eval/manual_test_results.md): Template for at least 5 manual test runs.
+- [`eval/langsmith_eval.py`](eval/langsmith_eval.py): Upload the dataset to LangSmith, run custom evaluators, and write a baseline report.
+- [`eval/langsmith_baseline_report.md`](eval/langsmith_baseline_report.md): Generated baseline metrics report (overall, by difficulty, plus failure cases).
+
+### LangSmith Evaluation
+
+1. Install backend dependencies:
+
+```bash
+cd backend
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+2. Create a local `.env` from the example if you have not already:
+
+```bash
+cp .env.example .env
+```
+
+3. Edit `.env` and set your LangSmith credentials:
+
+```bash
+LANGSMITH_TRACING=true
+LANGSMITH_API_KEY="<your-langsmith-api-key>"
+LANGSMITH_PROJECT="rag580"
+```
+
+Optional:
+
+```bash
+LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
+LANGSMITH_WORKSPACE_ID="<workspace-id>"
+```
+
+You can also override `OLLAMA_BASE_URL` in the same `.env` file if your Ollama server is not running on the default local endpoint.
+
+4. Run the evaluator:
+
+```bash
+backend/.venv/bin/python eval/langsmith_eval.py
+```
+
+The script does three things:
+
+- uploads or reuses the LangSmith dataset
+- runs **4 custom evaluators**: correctness, relevance, groundedness, conciseness
+- writes `eval/langsmith_baseline_report.md`
+
+If `LANGSMITH_API_KEY` is missing, the script still runs a local baseline pass and writes the report, but it skips LangSmith upload / experiment creation.
 
 ## Troubleshooting
 

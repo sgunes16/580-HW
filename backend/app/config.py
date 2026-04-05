@@ -2,9 +2,18 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+_BACKEND_ROOT = Path(__file__).resolve().parents[1]
+
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=(
+            str(_PROJECT_ROOT / ".env"),
+            str(_BACKEND_ROOT / ".env"),
+        ),
+        extra="ignore",
+    )
 
     project_root: Path = Path(__file__).resolve().parents[2]
     pdf_dir: Path = project_root / "data" / "pdfs"
@@ -18,6 +27,11 @@ class Settings(BaseSettings):
     default_chunk_size: int = 1000
     default_chunk_overlap: int = 150
     default_top_k: int = 4
+    langsmith_tracing: bool = False
+    langsmith_api_key: str | None = None
+    langsmith_endpoint: str | None = None
+    langsmith_project: str = "rag580"
+    langsmith_workspace_id: str | None = None
 
     cors_origins: list[str] = [
         "http://localhost:5173",

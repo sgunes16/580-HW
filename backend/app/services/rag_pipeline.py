@@ -10,6 +10,18 @@ from app.core.runtime_settings import get_settings
 from app.services import chat_memory as mem
 from app.services import vector_store as vs_mod
 
+try:
+    from langsmith import get_current_run_tree, traceable
+except ImportError:
+    def get_current_run_tree():
+        return None
+
+    def traceable(*_args, **_kwargs):
+        def _decorator(fn):
+            return fn
+
+        return _decorator
+
 SYSTEM_PROMPT = """You are a retrieval-augmented assistant for course materials focused on software engineering,
 data engineering, data systems, distributed systems, databases, machine learning systems,
 data science, analytics, and practical software development.
@@ -84,6 +96,15 @@ def _build_chat_state(
             raise ValueError("history items must have role 'user' or 'assistant'")
 
     rs = get_settings()
+    run_tree = get_current_run_tree()
+    if run_tree is not None:
+        run_tree.metadata.update(
+            {
+                "chunk_size": rs.chunk_size,
+                "chunk_overlap": rs.chunk_overlap,
+                "top_k": rs.top_k,
+            }
+        )
     vs = vs_mod.get_vectorstore()
 
     if vs is None:
@@ -167,6 +188,7 @@ def _build_chat_state(
     }
 
 
+@traceable(name="rag580_answer_question", run_type="chain")
 def answer_question(
     question: str,
     history: list[dict[str, str]] | None = None,

@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import chat, chats, documents, settings
 from app.config import settings as app_settings
+from app.core.langsmith_setup import configure_langsmith
 from app.db import chat_db
 
 logging.basicConfig(
@@ -16,6 +17,7 @@ logging.basicConfig(
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    configure_langsmith()
     chat_db.init_db()
     yield
 
