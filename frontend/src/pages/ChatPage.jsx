@@ -22,7 +22,6 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sources, setSources] = useState([]);
   const [memoryInfo, setMemoryInfo] = useState(null);
   const [contextUsage, setContextUsage] = useState(null);
   const [err, setErr] = useState("");
@@ -51,13 +50,12 @@ export default function ChatPage() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, sources, loading]);
+  }, [messages, loading]);
 
   function newChat() {
     conversationIdRef.current = null;
     setConversationId(null);
     setMessages([]);
-    setSources([]);
     setMemoryInfo(null);
     setContextUsage(null);
     setErr("");
@@ -69,7 +67,6 @@ export default function ChatPage() {
     conversationIdRef.current = id;
     setConversationId(id);
     setErr("");
-    setSources([]);
     setMemoryInfo(null);
     setContextUsage(null);
     setQ("");
@@ -83,6 +80,7 @@ export default function ChatPage() {
           id: row.id,
           role: row.role,
           content: row.content,
+          sources: row.sources || [],
         }))
       );
     } catch (e) {
@@ -113,12 +111,11 @@ export default function ChatPage() {
     }));
     setLoading(true);
     setErr("");
-    setSources([]);
     setMemoryInfo(null);
     setMessages((prev) => [
       ...prev,
-      { role: "user", content: question },
-      { id: assistantId, role: "assistant", content: "" },
+      { role: "user", content: question, sources: [] },
+      { id: assistantId, role: "assistant", content: "", sources: [] },
     ]);
     setQ("");
     try {
@@ -145,11 +142,14 @@ export default function ChatPage() {
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantId
-            ? { ...msg, content: data.answer || msg.content || "" }
+            ? {
+                ...msg,
+                content: data.answer || msg.content || "",
+                sources: data.sources || [],
+              }
             : msg
         )
       );
-      setSources(data.sources || []);
       setMemoryInfo(data.memory || null);
       setContextUsage(data.context_usage ?? null);
       await refreshConversations();
@@ -168,10 +168,6 @@ export default function ChatPage() {
   const segHist = bd?.history ?? 0;
   const segDoc = bd?.documents_and_question ?? 0;
   const segSum = segSys + segHist + segDoc || 1;
-  const latestAssistantIndex = [...messages]
-    .map((message, index) => (message.role === "assistant" ? index : -1))
-    .filter((index) => index >= 0)
-    .at(-1);
   const markdownSx = {
     fontSize: "sm",
     lineHeight: "1.6",
@@ -429,47 +425,45 @@ export default function ChatPage() {
                       {m.content || ""}
                     </ReactMarkdown>
                   </Box>
-                  {m.role === "assistant" &&
-                    i === latestAssistantIndex &&
-                    sources.length > 0 && (
-                      <Tooltip
-                        hasArrow
-                        placement="top-start"
-                        openDelay={120}
-                        bg="white"
-                        color="black"
-                        border="1px solid"
-                        borderColor="black"
-                        borderRadius="none"
-                        p={3}
-                        maxW="420px"
-                        label={
-                          <Stack spacing={3}>
-                            {sources.map((s) => (
-                              <Box key={s.rank}>
-                                <Text fontSize="xs" fontWeight="700" mb={1}>
-                                  #{s.rank} · {s.source}
-                                  {s.page != null ? ` · page ${s.page + 1}` : ""}
-                                </Text>
-                                <Text fontSize="xs" whiteSpace="pre-wrap">
-                                  {s.snippet}
-                                </Text>
-                              </Box>
-                            ))}
-                          </Stack>
-                        }
-                      >
-                        <Text
-                          mt={3}
-                          fontSize="xs"
-                          textDecoration="underline"
-                          cursor="help"
-                          width="fit-content"
+                  {m.role === "assistant" && (m.sources || []).length > 0 && (
+                    <Flex mt={3} gap={2} flexWrap="wrap" align="center">
+                      {(m.sources || []).map((s, idx) => (
+                        <Tooltip
+                          key={`${m.id ?? i}-src-${idx}`}
+                          hasArrow
+                          placement="top-start"
+                          openDelay={120}
+                          bg="white"
+                          color="black"
+                          border="1px solid"
+                          borderColor="black"
+                          borderRadius="none"
+                          p={3}
+                          maxW="420px"
+                          label={
+                            <Box>
+                              <Text fontSize="xs" fontWeight="700" mb={1}>
+                                {s.source}
+                                {s.page != null ? ` · page ${s.page + 1}` : ""}
+                              </Text>
+                              <Text fontSize="xs" whiteSpace="pre-wrap">
+                                {s.snippet}
+                              </Text>
+                            </Box>
+                          }
                         >
-                          References
-                        </Text>
-                      </Tooltip>
-                    )}
+                          <Text
+                            fontSize="xs"
+                            textDecoration="underline"
+                            cursor="help"
+                            width="fit-content"
+                          >
+                            [{idx + 1}]
+                          </Text>
+                        </Tooltip>
+                      ))}
+                    </Flex>
+                  )}
                 </Box>
               </Box>
             ))}
