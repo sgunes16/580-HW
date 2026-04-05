@@ -17,3 +17,45 @@
 - Embedding model: `nomic-embed-text`
 - LLM model: `llama3.2`
 
+## Screenshots And Ground Truth
+
+### 1. Five stages of lifecycle
+
+![Five stages test](screenshots/five-stages.png)
+
+Dataset correct answer:
+
+The data engineering lifecycle consists of five stages: generation, storage, ingestion, transformation, and serving.
+
+### 2. Three Vs of big data
+
+![Three Vs test](screenshots/three-vs.png)
+
+Dataset correct answer:
+
+The three Vs of big data are volume (massive data size), variety (heterogeneous data sources like text, photos, and video), and velocity (continuous, live data collection).
+
+### 3. OLTP vs OLAP read/write patterns
+
+![OLTP vs OLAP test](screenshots/oltp-vs-olap.png)
+
+Dataset correct answer:
+
+OLTP systems typically read a small number of records fetched by key and experience random-access, low-latency writes from user input. In contrast, OLAP systems aggregate over large numbers of records for their reads and handle writes via bulk imports or event streams.
+
+### 4. Hierarchical indexing in pandas
+
+![Hierarchical indexing test](screenshots/hierarchical-indexing.png)
+
+Dataset correct answer:
+
+Hierarchical indexing enables multiple index levels on an axis, allowing users to work with higher dimensional data in a lower dimensional form. The two primary actions to rearrange this data are `stack` (which pivots columns into rows) and `unstack` (which pivots rows into columns).
+
+### 5. Reverse ETL purpose
+
+![Reverse ETL test](screenshots/reverse-etl.png)
+
+Dataset correct answer:
+
+Reverse ETL is the process of taking processed data, analytics, or scored models from the output side of the data engineering lifecycle and feeding it back into source systems or production SaaS platforms. It is used to drive actions in production, such as pushing calculated cost-per-click bids back into an advertising platform like Google Ads.
+
