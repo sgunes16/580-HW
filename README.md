@@ -95,6 +95,8 @@ Server logs (terminal where `uvicorn` runs) record stack traces for unexpected e
 - [`eval/manual_test_results.md`](eval/manual_test_results.md): Template for at least 5 manual test runs.
 - [`eval/langsmith_eval.py`](eval/langsmith_eval.py): Upload the dataset to LangSmith, run custom evaluators, and write a baseline report.
 - [`eval/langsmith_baseline_report.md`](eval/langsmith_baseline_report.md): Generated baseline metrics report (overall, by difficulty, plus failure cases).
+- [`eval/langsmith_config_sweep.py`](eval/langsmith_config_sweep.py): Run 10 configuration experiments across chunk size, overlap, and top-k, then compare them.
+- [`eval/langsmith_config_sweep_report.md`](eval/langsmith_config_sweep_report.md): Generated sweep comparison report with the best configuration.
 
 ### LangSmith Evaluation
 
@@ -142,6 +144,27 @@ The script does three things:
 - writes `eval/langsmith_baseline_report.md`
 
 If `LANGSMITH_API_KEY` is missing, the script still runs a local baseline pass and writes the report, but it skips LangSmith upload / experiment creation.
+
+### LangSmith Configuration Sweep
+
+Run 10 configuration experiments with different `chunk_size`, `chunk_overlap`, and `top_k` values:
+
+```bash
+backend/.venv/bin/python eval/langsmith_config_sweep.py
+```
+
+What it does:
+
+- updates runtime settings for each configuration
+- fully re-indexes the PDFs for each chunking setup
+- runs the full evaluator suite as a separate LangSmith experiment
+- writes `eval/langsmith_config_sweep_report.md`
+
+Notes:
+
+- This is significantly slower than the single baseline eval because chunk-size and overlap changes require re-indexing.
+- You can pass a custom JSON config list with `--config-file path/to/configs.json`.
+- Use `--skip-langsmith` to run the sweep locally without uploading experiments.
 
 ## Troubleshooting
 
