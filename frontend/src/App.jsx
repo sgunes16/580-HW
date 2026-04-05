@@ -59,7 +59,19 @@ export default function App() {
         </Container>
       </Box>
       <Container maxW="container.lg" py={6} flex="1" minH="0" display="flex" overflow="hidden">
-        <Box flex="1" minH="0" overflow="hidden">
+        <Box
+          flex="1"
+          minH="0"
+          overflowY="auto"
+          overflowX="hidden"
+          sx={{
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
           <Routes>
             <Route path="/" element={<ChatPage />} />
             <Route path="/documents" element={<DocumentsPage />} />
