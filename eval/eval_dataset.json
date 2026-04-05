@@ -1,0 +1,25 @@
+{
+  "description": "After course PDFs are added, replace questions and reference answers with content grounded in those materials.",
+  "items": [
+    { "id": 1, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 2, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 3, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 4, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 5, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 6, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 7, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 8, "difficulty": "easy", "question": "", "reference_answer": "" },
+    { "id": 9, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 10, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 11, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 12, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 13, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 14, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 15, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 16, "difficulty": "medium", "question": "", "reference_answer": "" },
+    { "id": 17, "difficulty": "hard", "question": "", "reference_answer": "" },
+    { "id": 18, "difficulty": "hard", "question": "", "reference_answer": "" },
+    { "id": 19, "difficulty": "hard", "question": "", "reference_answer": "" },
+    { "id": 20, "difficulty": "hard", "question": "", "reference_answer": "" }
+  ]
+}
