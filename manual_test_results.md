@@ -21,7 +21,7 @@
 
 ### 1. Five stages of lifecycle
 
-![Five stages test](screenshots/five-stages.png)
+![Five stages test](eval/screenshots/five-stages.png)
 
 Dataset correct answer:
 
@@ -29,7 +29,7 @@ The data engineering lifecycle consists of five stages: generation, storage, ing
 
 ### 2. Three Vs of big data
 
-![Three Vs test](screenshots/three-vs.png)
+![Three Vs test](eval/screenshots/three-vs.png)
 
 Dataset correct answer:
 
@@ -37,7 +37,7 @@ The three Vs of big data are volume (massive data size), variety (heterogeneous 
 
 ### 3. OLTP vs OLAP read/write patterns
 
-![OLTP vs OLAP test](screenshots/oltp-vs-olap.png)
+![OLTP vs OLAP test](eval/screenshots/oltp-vs-olap.png)
 
 Dataset correct answer:
 
@@ -45,7 +45,7 @@ OLTP systems typically read a small number of records fetched by key and experie
 
 ### 4. Hierarchical indexing in pandas
 
-![Hierarchical indexing test](screenshots/hierarchical-indexing.png)
+![Hierarchical indexing test](eval/screenshots/hierarchical-indexing.png)
 
 Dataset correct answer:
 
@@ -53,7 +53,7 @@ Hierarchical indexing enables multiple index levels on an axis, allowing users t
 
 ### 5. Reverse ETL purpose
 
-![Reverse ETL test](screenshots/reverse-etl.png)
+![Reverse ETL test](eval/screenshots/reverse-etl.png)
 
 Dataset correct answer:
 
