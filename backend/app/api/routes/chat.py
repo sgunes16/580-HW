@@ -51,7 +51,12 @@ def chat(req: ChatRequest):
             conv_id = chat_db.create_conversation(title=title)
 
         chat_db.add_message(conv_id, "user", req.question.strip())
-        chat_db.add_message(conv_id, "assistant", out.get("answer") or "")
+        chat_db.add_message(
+            conv_id,
+            "assistant",
+            out.get("answer") or "",
+            sources=out.get("sources") or [],
+        )
         chat_db.touch_conversation(conv_id)
 
         out["conversation_id"] = conv_id
@@ -101,7 +106,12 @@ def chat_stream(req: ChatRequest):
 
             answer = "".join(parts)
             chat_db.add_message(conv_id, "user", req.question.strip())
-            chat_db.add_message(conv_id, "assistant", answer)
+            chat_db.add_message(
+                conv_id,
+                "assistant",
+                answer,
+                sources=meta.get("sources") or [],
+            )
             chat_db.touch_conversation(conv_id)
 
             yield encode(

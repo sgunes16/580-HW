@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import sqlite3
 import threading
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS messages (
     conversation_id TEXT NOT NULL,
     role TEXT NOT NULL,
     content TEXT NOT NULL,
+    sources_json TEXT,
     created_at TEXT NOT NULL,
     FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
 );
@@ -60,6 +62,12 @@ def _ensure_schema() -> None:
         try:
             conn.execute("PRAGMA foreign_keys = ON")
             conn.executescript(SCHEMA)
+            cols = {
+                row[1]
+                for row in conn.execute("PRAGMA table_info(messages)").fetchall()
+            }
+            if "sources_json" not in cols:
+                conn.execute("ALTER TABLE messages ADD COLUMN sources_json TEXT")
             conn.commit()
         finally:
             conn.close()
@@ -121,15 +129,22 @@ def touch_conversation(conversation_id: str) -> None:
         )
 
 
-def add_message(conversation_id: str, role: str, content: str) -> int:
+def add_message(
+    conversation_id: str,
+    role: str,
+    content: str,
+    *,
+    sources: list[dict[str, Any]] | None = None,
+) -> int:
     now = _now_iso()
+    sources_json = json.dumps(sources, ensure_ascii=False) if sources else None
     with get_connection() as conn:
         cur = conn.execute(
             """
-            INSERT INTO messages (conversation_id, role, content, created_at)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO messages (conversation_id, role, content, sources_json, created_at)
+            VALUES (?, ?, ?, ?, ?)
             """,
-            (conversation_id, role, content, now),
+            (conversation_id, role, content, sources_json, now),
         )
         return int(cur.lastrowid)
 
@@ -154,14 +169,26 @@ def get_messages(conversation_id: str) -> list[dict[str, Any]]:
     with get_connection() as conn:
         rows = conn.execute(
             """
-            SELECT id, role, content, created_at
+            SELECT id, role, content, sources_json, created_at
             FROM messages
             WHERE conversation_id = ?
             ORDER BY id ASC
             """,
             (conversation_id,),
         ).fetchall()
-    return [dict(r) for r in rows]
+    out = []
+    for row in rows:
+        item = dict(row)
+        raw_sources = item.pop("sources_json", None)
+        if raw_sources:
+            try:
+                item["sources"] = json.loads(raw_sources)
+            except json.JSONDecodeError:
+                item["sources"] = []
+        else:
+            item["sources"] = []
+        out.append(item)
+    return out
 
 
 def delete_conversation(conversation_id: str) -> bool:
