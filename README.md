@@ -75,6 +75,12 @@ Mount `./data` into the API container for PDFs, Chroma persistence, and `runtime
 
 PDFs are stored under `data/pdfs/`; Chroma data under `data/chroma/`. **Chat history** is stored in SQLite at `data/app.db` (conversations + messages). Each reply returns a `conversation_id`; send it on the next request to append to the same thread. The UI lists saved chats and supports delete.
 
+## Submission Note
+
+This repository includes the application code, evaluation scripts, and technical reports needed to reproduce the RAG pipeline. The **course PDF files themselves should also be provided separately** if they are not committed to the repository.
+
+To reproduce indexing and evaluation end to end, place the source PDFs under `data/pdfs/` before running document indexing, baseline evaluation, or configuration sweeps.
+
 ### API (chat)
 
 - `POST /api/chat` — JSON `{ "question": "…", "history": [ … ], "conversation_id": null | "<uuid>" }`. Omit `conversation_id` to start a new stored thread; reuse the id from the previous response to append. Response adds `conversation_id` and `context_usage` (estimated token breakdown vs the ~50k window for the UI gauge).
