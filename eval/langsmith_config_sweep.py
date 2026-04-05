@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
 from copy import deepcopy
 from pathlib import Path
@@ -16,8 +17,10 @@ if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
 from app.core.langsmith_setup import configure_langsmith  # noqa: E402
+from app.config import settings as app_settings  # noqa: E402
 from app.core.runtime_settings import get_settings, save_settings, update_settings  # noqa: E402
 from app.services import ingest  # noqa: E402
+from app.services import vector_store as vs_mod  # noqa: E402
 from langsmith_eval import (  # noqa: E402
     EVALUATORS,
     ensure_langsmith_dataset,
@@ -95,6 +98,19 @@ def make_progress_logger(run_idx: int, total_runs: int):
         )
 
     return _log
+
+
+def get_sweep_chroma_dir(config: dict[str, int]) -> Path:
+    return (
+        PROJECT_ROOT
+        / "data"
+        / "chroma_sweeps"
+        / f"c{config['chunk_size']}_o{config['chunk_overlap']}"
+    )
+
+
+def has_existing_index(path: Path) -> bool:
+    return path.exists() and any(path.iterdir())
 
 
 def build_report(
@@ -187,30 +203,52 @@ def main() -> int:
     items = load_eval_items()
     configs = load_configs(args.config_file)
     original_settings = deepcopy(get_settings())
+    original_chroma_dir = app_settings.chroma_dir
 
     client: Client | None = None
     langsmith_enabled = bool(os.environ.get("LANGSMITH_API_KEY")) and not args.skip_langsmith
     if langsmith_enabled:
         client = Client()
-        ensure_langsmith_dataset(client, args.dataset_name, items)
+        dataset = ensure_langsmith_dataset(client, args.dataset_name, items)
+        dataset_examples = list(client.list_examples(dataset_id=dataset.id))
+        if not dataset_examples:
+            raise RuntimeError(
+                f"LangSmith dataset '{args.dataset_name}' has no examples. "
+                "Recreate the dataset or use a new dataset name."
+            )
+    else:
+        dataset = None
+        dataset_examples = None
 
     results: list[dict[str, Any]] = []
     try:
         for idx, config in enumerate(configs, 1):
             print(f"[{idx}/{len(configs)}] Running {format_config(config)}")
             update_settings(**config)
-            progress_logger = make_progress_logger(idx, len(configs))
-            ingest.index_all_pdfs(
-                progress_callback=progress_logger,
-                reset_store=True,
-            )
-            print(f"[{idx}/{len(configs)}] indexing 100% | completed", flush=True)
+            sweep_chroma_dir = get_sweep_chroma_dir(config)
+            sweep_chroma_dir.parent.mkdir(parents=True, exist_ok=True)
+            app_settings.chroma_dir = sweep_chroma_dir
+            vs_mod.invalidate_cache()
+            if has_existing_index(sweep_chroma_dir):
+                print(
+                    f"[{idx}/{len(configs)}] indexing skipped | reusing existing index at {sweep_chroma_dir}",
+                    flush=True,
+                )
+            else:
+                if sweep_chroma_dir.exists():
+                    shutil.rmtree(sweep_chroma_dir)
+                progress_logger = make_progress_logger(idx, len(configs))
+                ingest.index_all_pdfs(
+                    progress_callback=progress_logger,
+                    reset_store=True,
+                )
+                print(f"[{idx}/{len(configs)}] indexing 100% | completed", flush=True)
 
             langsmith_url = None
             if langsmith_enabled:
                 experiment_results = evaluate(
                     predict,
-                    data=args.dataset_name,
+                    data=dataset_examples,
                     evaluators=EVALUATORS,
                     experiment_prefix=(
                         "rag580-sweep-"
@@ -242,6 +280,8 @@ def main() -> int:
                 }
             )
     finally:
+        app_settings.chroma_dir = original_chroma_dir
+        vs_mod.invalidate_cache()
         save_settings(original_settings)
 
     report = build_report(

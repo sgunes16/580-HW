@@ -187,6 +187,9 @@ def ensure_langsmith_dataset(client: Client, dataset_name: str, items: list[dict
             dataset_name=dataset_name,
             description="RAG580 evaluation dataset uploaded from eval/eval_dataset.json",
         )
+
+    existing_examples = list(client.list_examples(dataset_id=dataset.id))
+    if not existing_examples:
         client.create_examples(
             dataset_id=dataset.id,
             inputs=[
