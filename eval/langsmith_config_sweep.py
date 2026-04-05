@@ -28,16 +28,16 @@ from langsmith_eval import (  # noqa: E402
 )
 
 DEFAULT_CONFIGS: list[dict[str, int]] = [
-    {"chunk_size": 600, "chunk_overlap": 100, "top_k": 3},
-    {"chunk_size": 600, "chunk_overlap": 100, "top_k": 5},
-    {"chunk_size": 800, "chunk_overlap": 120, "top_k": 3},
-    {"chunk_size": 800, "chunk_overlap": 120, "top_k": 5},
-    {"chunk_size": 1000, "chunk_overlap": 150, "top_k": 4},
-    {"chunk_size": 1000, "chunk_overlap": 150, "top_k": 6},
-    {"chunk_size": 1200, "chunk_overlap": 180, "top_k": 4},
-    {"chunk_size": 1200, "chunk_overlap": 180, "top_k": 6},
-    {"chunk_size": 1400, "chunk_overlap": 200, "top_k": 4},
-    {"chunk_size": 1600, "chunk_overlap": 240, "top_k": 6},
+    {"chunk_size": 500, "chunk_overlap": 80, "top_k": 3},
+    {"chunk_size": 1000, "chunk_overlap": 120, "top_k": 4},
+    {"chunk_size": 1500, "chunk_overlap": 180, "top_k": 4},
+    {"chunk_size": 2000, "chunk_overlap": 240, "top_k": 5},
+    {"chunk_size": 2500, "chunk_overlap": 300, "top_k": 5},
+    {"chunk_size": 3000, "chunk_overlap": 360, "top_k": 6},
+    {"chunk_size": 3500, "chunk_overlap": 420, "top_k": 6},
+    {"chunk_size": 4000, "chunk_overlap": 480, "top_k": 7},
+    {"chunk_size": 4500, "chunk_overlap": 540, "top_k": 7},
+    {"chunk_size": 5000, "chunk_overlap": 600, "top_k": 8},
 ]
 
 
@@ -76,6 +76,25 @@ def format_config(config: dict[str, int]) -> str:
         f"chunk_overlap={config['chunk_overlap']}, "
         f"top_k={config['top_k']}"
     )
+
+
+def make_progress_logger(run_idx: int, total_runs: int):
+    last_pct: int | None = None
+    last_msg = ""
+
+    def _log(pct: float, msg: str) -> None:
+        nonlocal last_pct, last_msg
+        pct_int = int(round(pct))
+        if pct_int == last_pct and msg == last_msg:
+            return
+        last_pct = pct_int
+        last_msg = msg
+        print(
+            f"[{run_idx}/{total_runs}] indexing {pct_int:>3}% | {msg}",
+            flush=True,
+        )
+
+    return _log
 
 
 def build_report(
@@ -180,7 +199,12 @@ def main() -> int:
         for idx, config in enumerate(configs, 1):
             print(f"[{idx}/{len(configs)}] Running {format_config(config)}")
             update_settings(**config)
-            ingest.index_all_pdfs(reset_store=True)
+            progress_logger = make_progress_logger(idx, len(configs))
+            ingest.index_all_pdfs(
+                progress_callback=progress_logger,
+                reset_store=True,
+            )
+            print(f"[{idx}/{len(configs)}] indexing 100% | completed", flush=True)
 
             langsmith_url = None
             if langsmith_enabled:

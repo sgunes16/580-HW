@@ -213,7 +213,10 @@ def run_local_eval(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
         example = {"outputs": {"answer": item["reference_answer"]}}
         metrics: dict[str, float] = {}
         for evaluator in EVALUATORS:
-            metrics.update(evaluator(run, example))
+            result = evaluator(run, example)
+            key = result.get("key")
+            if key:
+                metrics[key] = float(result.get("score", 0.0))
         records.append(
             {
                 "id": item["id"],
