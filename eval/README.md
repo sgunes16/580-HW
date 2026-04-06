@@ -59,7 +59,7 @@ Without `LANGSMITH_API_KEY`, the script still runs **local** evaluation and writ
 
 ### Configuration sweep (`langsmith_config_sweep.py`)
 
-Runs **10** default experiments (chunk size 500→5000 with paired overlap and `top_k`). For each config it:
+Runs **4** default experiments (chunk size `500` → `2000` with paired overlap and `top_k`). For each config it:
 
 - Updates `runtime_settings` (chunk / overlap / top_k)
 - Uses an **isolated Chroma directory** under `data/chroma_sweeps/c{size}_o{overlap}/` (skips re-index if that folder already exists)

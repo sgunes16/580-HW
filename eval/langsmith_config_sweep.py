@@ -32,15 +32,15 @@ from langsmith_eval import (  # noqa: E402
 
 DEFAULT_CONFIGS: list[dict[str, int]] = [
     {"chunk_size": 500, "chunk_overlap": 80, "top_k": 3},
-    {"chunk_size": 1000, "chunk_overlap": 120, "top_k": 4},
-    {"chunk_size": 1500, "chunk_overlap": 180, "top_k": 4},
+    {"chunk_size": 650, "chunk_overlap": 90, "top_k": 3},
+    {"chunk_size": 800, "chunk_overlap": 100, "top_k": 4},
+    {"chunk_size": 950, "chunk_overlap": 120, "top_k": 4},
+    {"chunk_size": 1100, "chunk_overlap": 130, "top_k": 4},
+    {"chunk_size": 1250, "chunk_overlap": 150, "top_k": 4},
+    {"chunk_size": 1400, "chunk_overlap": 170, "top_k": 4},
+    {"chunk_size": 1550, "chunk_overlap": 190, "top_k": 5},
+    {"chunk_size": 1750, "chunk_overlap": 210, "top_k": 5},
     {"chunk_size": 2000, "chunk_overlap": 240, "top_k": 5},
-    {"chunk_size": 2500, "chunk_overlap": 300, "top_k": 5},
-    {"chunk_size": 3000, "chunk_overlap": 360, "top_k": 6},
-    {"chunk_size": 3500, "chunk_overlap": 420, "top_k": 6},
-    {"chunk_size": 4000, "chunk_overlap": 480, "top_k": 7},
-    {"chunk_size": 4500, "chunk_overlap": 540, "top_k": 7},
-    {"chunk_size": 5000, "chunk_overlap": 600, "top_k": 8},
 ]
 
 

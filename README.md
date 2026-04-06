@@ -101,7 +101,7 @@ Server logs (terminal where `uvicorn` runs) record stack traces for unexpected e
 - [`eval/manual_test_results.md`](eval/manual_test_results.md): Template for at least 5 manual test runs.
 - [`eval/langsmith_eval.py`](eval/langsmith_eval.py): Upload the dataset to LangSmith, run custom evaluators, and write a baseline report.
 - [`eval/langsmith_baseline_report.md`](eval/langsmith_baseline_report.md): Generated baseline metrics report (overall, by difficulty, plus failure cases).
-- [`eval/langsmith_config_sweep.py`](eval/langsmith_config_sweep.py): Run 10 configuration experiments across chunk size, overlap, and top-k, then compare them.
+- [`eval/langsmith_config_sweep.py`](eval/langsmith_config_sweep.py): Run the default sweep across chunk size, overlap, and top-k settings from `500` to `2000`, then compare them.
 - [`eval/langsmith_config_sweep_report.md`](eval/langsmith_config_sweep_report.md): Generated sweep comparison report with the best configuration.
 
 ### LangSmith Evaluation
@@ -153,7 +153,7 @@ If `LANGSMITH_API_KEY` is missing, the script still runs a local baseline pass a
 
 ### LangSmith Configuration Sweep
 
-Run 10 configuration experiments with different `chunk_size`, `chunk_overlap`, and `top_k` values:
+Run the default configuration sweep across `chunk_size` values from `500` to `2000`, with paired `chunk_overlap` and `top_k` values:
 
 ```bash
 backend/.venv/bin/python eval/langsmith_config_sweep.py
