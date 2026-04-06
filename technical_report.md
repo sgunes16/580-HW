@@ -165,18 +165,17 @@ The strongest next steps would be:
 
 ![LangSmith dataset view](<screenshots/langsmith/Screenshot 2026-04-06 at 23-23-40 rag580-eval - LangSmith.png>)
 
-#### Baseline / experiment view
+#### Comparison view
 
 ![LangSmith experiment view](<screenshots/langsmith/Screenshot 2026-04-06 at 23-25-16 rag580-eval - LangSmith.png>)
 
-#### Trace or evaluator detail view
+#### experiment view
 
 ![LangSmith trace detail](<screenshots/langsmith/Screenshot 2026-04-06 at 23-24-58 rag580-sweep-c2000-o240-k5-3b5ea2ab - LangSmith.png>)
 
-#### Sweep comparison view
+#### Trace or evaluator detail view
 
 ![LangSmith sweep comparison](<screenshots/langsmith/Screenshot 2026-04-06 at 23-24-37 rag580-sweep-c2000-o240-k5-3b5ea2ab - LangSmith.png>)
-
 
 
 ## 9. Reproducibility
